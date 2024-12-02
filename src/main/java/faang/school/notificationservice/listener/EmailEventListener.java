@@ -32,6 +32,5 @@ public class EmailEventListener extends AbstractEventListener<EmailEvent> implem
             sendNotification(event.getReceiverId(), text);
             log.info("Notification was sent to userId={}, text: {}", event.getReceiverId(), text);
         });
-
     }
 }
