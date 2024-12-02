@@ -1,7 +1,6 @@
 package faang.school.notificationservice.config;
 
-import faang.school.notificationservice.listener.FollowerEventListener;
-import faang.school.notificationservice.listener.RecommendationReceivedListener;
+import faang.school.notificationservice.listener.EmailEventListener;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,11 +21,8 @@ public class RedisConfig {
     @Value("${spring.data.redis.port}")
     private int redisPort;
 
-    @Value("${spring.data.redis.channel.follower}")
-    private String followerChannel;
-
-    @Value("${spring.data.redis.channel.recommendation}")
-    private String recommendationChannel;
+    @Value("${spring.data.redis.channel.email}")
+    private String emailChannel;
 
     @Bean
     public JedisConnectionFactory jedisConnectionFactory() {
@@ -38,41 +34,26 @@ public class RedisConfig {
     public RedisTemplate<String, Object> redisTemplate() {
         RedisTemplate<String, Object> template = new RedisTemplate<>();
         template.setConnectionFactory(jedisConnectionFactory());
-//        template.setKeySerializer(new Jackson2JsonRedisSerializer<>(Object.class));
         template.setKeySerializer(new StringRedisSerializer());
         template.setValueSerializer(new StringRedisSerializer());
         return template;
     }
 
     @Bean
-    MessageListenerAdapter followerListener(FollowerEventListener followerEventListener){
-        return new MessageListenerAdapter(followerEventListener);
+    MessageListenerAdapter emailListener(EmailEventListener emailEventListener){
+        return new MessageListenerAdapter(emailEventListener);
     }
 
     @Bean
-    MessageListenerAdapter recommendationListener(RecommendationReceivedListener recommendationReceivedListener){
-        return new MessageListenerAdapter(recommendationReceivedListener);
+    ChannelTopic emailTopic() {
+        return new ChannelTopic(emailChannel);
     }
 
     @Bean
-    ChannelTopic followerTopic() {
-        return new ChannelTopic(followerChannel);
-    }
-
-    @Bean
-    ChannelTopic recommendationTopic(){
-        return new ChannelTopic(recommendationChannel);
-    }
-
-    @Bean
-    RedisMessageListenerContainer redisContainer(MessageListenerAdapter followerListener,
-                                                 MessageListenerAdapter recommendationListener) {
+    RedisMessageListenerContainer redisContainer(MessageListenerAdapter emailListener) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(jedisConnectionFactory());
-        container.addMessageListener(followerListener, followerTopic());
-        container.addMessageListener(recommendationListener, recommendationTopic());
-//        add other topics
-//        container.addMessageListener(...);
+        container.addMessageListener(emailListener, emailTopic());
         return container;
     }
 }

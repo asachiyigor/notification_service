@@ -7,8 +7,8 @@ import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
-public class FollowerEvent {
-    private long followerId;
-    private long followeeId;
+public class EmailEvent {
+    private long receiverId;
+    private long authorId;
     private LocalDateTime timestamp;
 }
