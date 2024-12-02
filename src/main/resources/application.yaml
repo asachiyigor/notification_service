@@ -25,6 +25,9 @@ spring:
   messages:
     basename: messages
 
+  profiles:
+    active: dev
+
 server:
   port: 8083
 
