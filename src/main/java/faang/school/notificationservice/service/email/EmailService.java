@@ -34,6 +34,5 @@ public class EmailService implements NotificationService {
         message.setSubject("Notification from Notification Service");
         message.setText(text);
         mailSender.send(message);
-        log.info("Email was sent to userId={}, text: {}", user.getId(), text);
     }
 }
