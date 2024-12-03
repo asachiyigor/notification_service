@@ -33,7 +33,7 @@ public class EmailEventListener extends AbstractEventListener<EmailEvent> implem
     public void onMessage(Message message, byte[] pattern) {
         handleEvent(message, EmailEvent.class, event ->{
             UserDto author = userServiceClient.getUser(event.getAuthorId());
-            String text = getMessage(event, author.getLocale());
+            String text = getMessage(event.getClass(), event, author.getLocale());
             sendNotification(event.getReceiverId(), text);
             log.info("Notification was sent to userId={}, text: {}", event.getReceiverId(), text);
         });
