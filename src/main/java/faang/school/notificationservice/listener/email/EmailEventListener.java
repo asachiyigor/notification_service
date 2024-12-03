@@ -1,10 +1,11 @@
-package faang.school.notificationservice.listener;
+package faang.school.notificationservice.listener.email;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import faang.school.notificationservice.client.UserServiceClient;
 import faang.school.notificationservice.dto.EmailEvent;
 import faang.school.notificationservice.dto.UserDto;
-import faang.school.notificationservice.service.MessageBuilder;
+import faang.school.notificationservice.listener.AbstractEventListener;
+import faang.school.notificationservice.messaging.MessageBuilder;
 import faang.school.notificationservice.service.NotificationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

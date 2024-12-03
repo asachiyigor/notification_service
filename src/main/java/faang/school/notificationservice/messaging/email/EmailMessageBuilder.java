@@ -1,7 +1,7 @@
-package faang.school.notificationservice.service.email;
+package faang.school.notificationservice.messaging.email;
 
 import faang.school.notificationservice.dto.EmailEvent;
-import faang.school.notificationservice.service.MessageBuilder;
+import faang.school.notificationservice.messaging.MessageBuilder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
@@ -23,7 +23,7 @@ public class EmailMessageBuilder implements MessageBuilder<EmailEvent> {
     }
 
     @Override
-    public Class<?> supportEventType() {
+    public Class<?> getInstance() {
         return EmailEvent.class;
     }
 }
