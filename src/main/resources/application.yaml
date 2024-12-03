@@ -3,7 +3,6 @@ spring:
     redis:
       port: 6379
       host: localhost
-      emailTopic: email_channel
 
   mail:
     host: smtp.gmail.com
