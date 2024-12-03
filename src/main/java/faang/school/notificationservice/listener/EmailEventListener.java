@@ -7,8 +7,10 @@ import faang.school.notificationservice.dto.UserDto;
 import faang.school.notificationservice.service.MessageBuilder;
 import faang.school.notificationservice.service.NotificationService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;
+import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -16,6 +18,8 @@ import java.util.List;
 @Slf4j
 @Component
 public class EmailEventListener extends AbstractEventListener<EmailEvent> implements MessageListener {
+    @Value("${spring.data.redis.emailTopic}")
+    private String emailTopic;
 
     public EmailEventListener(ObjectMapper objectMapper,
                               UserServiceClient userServiceClient,
@@ -32,5 +36,10 @@ public class EmailEventListener extends AbstractEventListener<EmailEvent> implem
             sendNotification(event.getReceiverId(), text);
             log.info("Notification was sent to userId={}, text: {}", event.getReceiverId(), text);
         });
+    }
+
+    @Override
+    public ChannelTopic getTopic() {
+        return new ChannelTopic(emailTopic);
     }
 }

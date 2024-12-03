@@ -1,32 +1,27 @@
-package faang.school.notificationservice.config;
+package faang.school.notificationservice.config.redis;
 
-import faang.school.notificationservice.listener.EmailEventListener;
-import org.springframework.beans.factory.annotation.Value;
+import faang.school.notificationservice.listener.AbstractEventListener;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
-import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
+import java.util.List;
+
 @Configuration
+@RequiredArgsConstructor
 public class RedisConfig {
-
-    @Value("${spring.data.redis.host}")
-    private String redisHost;
-
-    @Value("${spring.data.redis.port}")
-    private int redisPort;
-
-    @Value("${spring.data.redis.channel.email}")
-    private String emailChannel;
+    private final RedisProperties redisProperties;
+    private final List<AbstractEventListener<?>> listeners;
 
     @Bean
     public JedisConnectionFactory jedisConnectionFactory() {
-        RedisStandaloneConfiguration redisConfig = new RedisStandaloneConfiguration(redisHost, redisPort);
+        RedisStandaloneConfiguration redisConfig = new RedisStandaloneConfiguration(
+                redisProperties.host(), redisProperties.port());
         return new JedisConnectionFactory(redisConfig);
     }
 
@@ -40,20 +35,11 @@ public class RedisConfig {
     }
 
     @Bean
-    MessageListenerAdapter emailListener(EmailEventListener emailEventListener){
-        return new MessageListenerAdapter(emailEventListener);
-    }
-
-    @Bean
-    ChannelTopic emailTopic() {
-        return new ChannelTopic(emailChannel);
-    }
-
-    @Bean
-    RedisMessageListenerContainer redisContainer(MessageListenerAdapter emailListener) {
+    RedisMessageListenerContainer redisContainer() {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(jedisConnectionFactory());
-        container.addMessageListener(emailListener, emailTopic());
+        listeners.forEach(listener ->
+                container.addMessageListener(listener.getListenerAdapter(), listener.getTopic()));
         return container;
     }
 }
