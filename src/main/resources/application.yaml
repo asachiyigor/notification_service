@@ -33,11 +33,12 @@ logging:
   level:
     root: info
 
-#Можно зарегистрировать аккаунт без привязки карты. Будет 2 евро на отправку тестовых SMS
+  #Можно зарегистрировать аккаунт без привязки карты. Будет 2 евро на отправку тестовых SMS
 vonage: #https://dashboard.nexmo.com/getting-started/sms
   api:
-    key: #// тут api key
-    secret: #// тут secret key
+    apiKey: #// тут api key
+    apiSecret: #// тут secret key
+
 
 project-service:
     host: localhost

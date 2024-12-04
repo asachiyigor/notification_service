@@ -7,8 +7,10 @@ import com.vonage.client.sms.messages.TextMessage;
 import faang.school.notificationservice.dto.UserDto;
 import faang.school.notificationservice.service.NotificationService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class SmsService implements NotificationService {
@@ -25,9 +27,9 @@ public class SmsService implements NotificationService {
         SmsSubmissionResponse response = vonageClient.getSmsClient().submitMessage(textMessage);
 
         if (response.getMessages().get(0).getStatus() == MessageStatus.OK) {
-            System.out.println("Message sent successfully.");
+            log.info("Message sent successfully.");
         } else {
-            System.out.println("Message failed with error: " + response.getMessages().get(0).getErrorText());
+            log.error("Message failed with error: {}", response.getMessages().get(0).getErrorText());
         }
     }
 
