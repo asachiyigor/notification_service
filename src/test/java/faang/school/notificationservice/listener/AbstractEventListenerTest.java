@@ -79,9 +79,7 @@ class AbstractEventListenerTest {
     void testHandleEvent_Positive() throws IOException {
         when(message.getBody()).thenReturn(messageBody);
         when(objectMapper.readValue(messageBody, Event.class)).thenReturn(event);
-
         abstractEventListener.handleEvent(message, Event.class, consumer);
-
         verify(objectMapper, times(1)).readValue(messageBody, Event.class);
     }
 
@@ -131,7 +129,6 @@ class AbstractEventListenerTest {
     @Data
     static class Event {
         private String name;
-
         Event(String name) {
             this.name = name;
         }
