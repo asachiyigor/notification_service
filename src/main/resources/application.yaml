@@ -3,10 +3,10 @@ spring:
     redis:
       port: 6379
       host: localhost
-      userSmsTopic: smsTopic
       channel:
         follower: follower_channel
         achievement: achievement_channel
+        sms: smsTopic
 
   mail:
     host: smtp.gmail.com
