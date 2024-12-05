@@ -34,7 +34,7 @@ public abstract class AbstractEventListener<T> {
 
     protected String getMessage(Class<?> eventClass, T event, Locale userlocale) {
         return messageBuilders.stream()
-                .filter(builder -> builder.getInstance().equals(eventClass))
+                .filter(builder -> builder.getInstance() == eventClass)
                 .findFirst()
                 .map(messageBuilder -> messageBuilder.buildMessage(event, userlocale))
                 .orElseThrow(
