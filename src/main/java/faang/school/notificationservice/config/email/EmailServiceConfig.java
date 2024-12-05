@@ -25,7 +25,7 @@ public class EmailServiceConfig {
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", mailProperties.protocol());
         props.put("mail.smtp.auth", mailProperties.auth());
-        props.put("mail.smtp.starttls.enable", mailProperties.protocol());
+        props.put("mail.smtp.starttls.enable", mailProperties.starttls());
         props.put("mail.debug", mailProperties.debug());
 
         return mailSender;
