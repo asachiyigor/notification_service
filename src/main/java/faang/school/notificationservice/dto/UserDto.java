@@ -16,6 +16,6 @@ public class UserDto {
     private Locale locale;
 
     public enum PreferredContact {
-        EMAIL, SMS, TELEGRAM
+        EMAIL, SMS, TELEGRAM, PHONE
     }
 }
