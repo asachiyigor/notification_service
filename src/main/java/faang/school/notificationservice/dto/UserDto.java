@@ -16,6 +16,7 @@ public class UserDto {
     private Long id;
     private String username;
     private String email;
+    private String phone;
     private List<Long> participatedEventIds;
     private PreferredContact preference;
     private Locale locale;
