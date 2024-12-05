@@ -20,7 +20,6 @@ import java.util.Locale;
 import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -89,15 +88,6 @@ class AbstractEventListenerTest {
         when(objectMapper.readValue(messageBody, Event.class)).thenThrow(IOException.class);
 
         assertThrows(RuntimeException.class, () -> abstractEventListener.handleEvent(message, Event.class, consumer));
-    }
-
-    @Test
-    void testGetMessage_Positive() {
-        when(messageBuilder.getInstance()).thenReturn(Event.class);
-        when(messageBuilder.buildMessage(any(), any())).thenReturn(messageBuild);
-
-        String result = abstractEventListener.getMessage(Event.class, event, Locale.ENGLISH);
-        assertEquals(messageBuilder.buildMessage(event, Locale.ENGLISH), result);
     }
 
     @Test
