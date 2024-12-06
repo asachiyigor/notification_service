@@ -23,7 +23,7 @@ public abstract class AbstractEventListener<T> {
     private final List<NotificationService> notificationServices;
     private final List<MessageBuilder<T>> messageBuilders;
     private final ObjectMapper objectMapper;
-    private final UserServiceClient userServiceClient;
+    protected final UserServiceClient userServiceClient;
 
     protected void handleEvent(Message message, Class<T> eventClass, Consumer<T> consumer) {
         try {
