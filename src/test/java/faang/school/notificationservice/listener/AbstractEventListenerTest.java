@@ -20,6 +20,8 @@ import java.util.Locale;
 import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -59,6 +61,7 @@ class AbstractEventListenerTest {
         channelTopic = "test-topic";
         userDto = UserDto.builder()
                 .id(1L)
+                .email("user@gmail.com")
                 .preference(UserDto.PreferredContact.EMAIL)
                 .build();
         abstractEventListener = new AbstractEventListener<>(
@@ -98,22 +101,16 @@ class AbstractEventListenerTest {
 
     @Test
     void testSendNotification_Positive() {
-        when(userServiceClient.getUser(1L)).thenReturn(userDto);
         when(notificationService.getPreferredContact()).thenReturn(UserDto.PreferredContact.EMAIL);
-
-        abstractEventListener.sendNotification(1L, "Test message");
-
-        verify(userServiceClient, times(1)).getUser(eq(1L));
+        abstractEventListener.sendNotification(userDto, "Test message");
         verify(notificationService, times(1)).send(userDto, messageBuild);
     }
 
     @Test
     void testSendNotification_Negative() {
-        when(userServiceClient.getUser(1L)).thenReturn(userDto);
         when(notificationService.getPreferredContact()).thenReturn(UserDto.PreferredContact.SMS);
-
         assertThrows(IllegalArgumentException.class, () ->
-                abstractEventListener.sendNotification(1L, "Test message"));
+                abstractEventListener.sendNotification(userDto, "Test message"));
     }
 
     @Data
