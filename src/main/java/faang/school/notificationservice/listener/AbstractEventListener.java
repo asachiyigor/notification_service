@@ -47,14 +47,13 @@ public abstract class AbstractEventListener<T> {
         return text;
     }
 
-    protected void sendNotification(Long userId, String message) {
-        UserDto userDto = userServiceClient.getUser(userId);
+    protected void sendNotification(UserDto receiver, String message) {
         notificationServices.stream()
-                .filter(service -> service.getPreferredContact() == userDto.getPreference())
+                .filter(service -> service.getPreferredContact() == receiver.getPreference())
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("No notification service found for user " + userId))
-                .send(userDto, message);
-        log.info("Notification sent to user {} with message: {}", userId, message);
+                .orElseThrow(() -> new IllegalArgumentException("No notification service found for receiver " + receiver.getUsername()))
+                .send(receiver, message);
+        log.info("Notification sent to receiver {} with message: {}", receiver.getUsername(), message);
     }
 
     public MessageListenerAdapter getListenerAdapter() {

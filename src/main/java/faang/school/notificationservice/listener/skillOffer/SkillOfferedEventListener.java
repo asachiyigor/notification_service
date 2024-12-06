@@ -6,7 +6,6 @@ import faang.school.notificationservice.dto.UserDto;
 import faang.school.notificationservice.listener.AbstractEventListener;
 import faang.school.notificationservice.messaging.MessageBuilder;
 import faang.school.notificationservice.service.NotificationService;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.connection.Message;
@@ -37,8 +36,9 @@ public class SkillOfferedEventListener extends AbstractEventListener<SkillOffere
     @Override
     public void onMessage(Message message, byte[] pattern) {
         handleEvent(message, SkillOfferedEvent.class, event ->{
-            UserDto sender = userServiceClient.getUser(event.getSenderId());
-            getMessage(SkillOfferedEvent.class, event, )
+            UserDto receiver = userServiceClient.getUser(event.getReceiverId());
+            String text = getMessage(SkillOfferedEvent.class, event, receiver.getLocale());
+            sendNotification(receiver, text);
         });
     }
 }
