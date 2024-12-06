@@ -51,9 +51,10 @@ public abstract class AbstractEventListener<T> {
         notificationServices.stream()
                 .filter(service -> service.getPreferredContact() == receiver.getPreference())
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("No notification service found for receiver " + receiver.getUsername()))
+                .orElseThrow(() ->
+                        new IllegalArgumentException("No notification service found for receiver " + receiver.getEmail()))
                 .send(receiver, message);
-        log.info("Notification sent to receiver {} with message: {}", receiver.getUsername(), message);
+        log.info("Notification sent to receiver {} with message: {}", receiver.getEmail(), message);
     }
 
     public MessageListenerAdapter getListenerAdapter() {
