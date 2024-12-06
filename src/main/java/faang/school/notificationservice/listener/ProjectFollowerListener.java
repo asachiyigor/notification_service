@@ -38,9 +38,9 @@ public class ProjectFollowerListener extends AbstractEventListener<ProjectFollow
     @Override
     public void onMessage(Message message, byte[] pattern) {
         handleEvent(message, ProjectFollowerEvent.class, event -> {
-            UserDto user = userServiceClient.getUser(event.ownerId());
-            String text = getMessage(ProjectFollowerEvent.class, event, user.getLocale());
-            sendNotification(event.ownerId(), text);
+            UserDto receiver = userServiceClient.getUser(event.ownerId());
+            String text = getMessage(ProjectFollowerEvent.class, event, receiver.getLocale());
+            sendNotification(receiver, text);
             log.info("Notification ProjectFollowerEvent was send.");
         });
     }

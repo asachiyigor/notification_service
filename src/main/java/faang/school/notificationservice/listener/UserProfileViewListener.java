@@ -40,7 +40,7 @@ public class UserProfileViewListener extends AbstractEventListener<UserProfileEv
         handleEvent(message, UserProfileEvent.class, event -> {
             UserDto viewedUser = userServiceClient.getUser(event.viewedId());
             String text = getMessage(UserProfileEvent.class, event, viewedUser.getLocale());
-            sendNotification(event.viewedId(), text);
+            sendNotification(viewedUser, text);
             log.info("Notification UserProfileEvent was send.");
         });
     }
