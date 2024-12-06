@@ -3,7 +3,7 @@ package faang.school.notificationservice.listener;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import faang.school.notificationservice.client.UserServiceClient;
 import faang.school.notificationservice.dto.UserDto;
-import faang.school.notificationservice.dto.event.ProjectFollowerEvent;
+import faang.school.notificationservice.dto.event.UserProfileEvent;
 import faang.school.notificationservice.messaging.MessageBuilder;
 import faang.school.notificationservice.service.NotificationService;
 import lombok.extern.slf4j.Slf4j;
@@ -17,31 +17,31 @@ import java.util.List;
 
 @Component
 @Slf4j
-public class ProjectFollowerListener extends AbstractEventListener<ProjectFollowerEvent> implements MessageListener {
+public class UserProfileViewListener extends AbstractEventListener<UserProfileEvent> implements MessageListener {
     private final UserServiceClient userServiceClient;
+    @Value("${spring.data.redis.channel.user-view-channel.name}")
+    private String userProfileEventChannel;
 
-    public ProjectFollowerListener(List<NotificationService> notificationServices,
-                                   List<MessageBuilder<ProjectFollowerEvent>> messageBuilders,
-                                   ObjectMapper objectMapper, UserServiceClient userServiceClient) {
+    public UserProfileViewListener(List<NotificationService> notificationServices,
+                                   List<MessageBuilder<UserProfileEvent>> messageBuilders,
+                                   ObjectMapper objectMapper,
+                                   UserServiceClient userServiceClient) {
         super(notificationServices, messageBuilders, objectMapper, userServiceClient);
         this.userServiceClient = userServiceClient;
     }
 
-    @Value("${spring.data.redis.channel.project-follower-channel.name}")
-    private String projectFollowerChannel;
-
     @Override
     public ChannelTopic getChannelTopic() {
-        return new ChannelTopic(projectFollowerChannel);
+        return new ChannelTopic(userProfileEventChannel);
     }
 
     @Override
     public void onMessage(Message message, byte[] pattern) {
-        handleEvent(message, ProjectFollowerEvent.class, event -> {
-            UserDto user = userServiceClient.getUser(event.ownerId());
-            String text = getMessage(ProjectFollowerEvent.class, event, user.getLocale());
-            sendNotification(event.ownerId(), text);
-            log.info("Notification ProjectFollowerEvent was send.");
+        handleEvent(message, UserProfileEvent.class, event -> {
+            UserDto viewedUser = userServiceClient.getUser(event.viewedId());
+            String text = getMessage(UserProfileEvent.class, event, viewedUser.getLocale());
+            sendNotification(event.viewedId(), text);
+            log.info("Notification UserProfileEvent was send.");
         });
     }
 }

@@ -9,6 +9,8 @@ spring:
         project-follower-channel:
           name: project-follower-channel
         sms: smsTopic
+        user-view-channel:
+          name: user-view-channel
 
   mail:
     host: smtp.gmail.com
