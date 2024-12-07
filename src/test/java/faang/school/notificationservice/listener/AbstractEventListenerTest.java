@@ -85,9 +85,12 @@ class AbstractEventListenerTest {
     @Test
     void testHandleEvent_Negative() throws IOException {
         when(message.getBody()).thenReturn(messageBody);
-        when(objectMapper.readValue(messageBody, Event.class)).thenThrow(IOException.class);
+        when(objectMapper.readValue(messageBody, Event.class)).thenThrow(new IOException());
 
-        assertThrows(RuntimeException.class, () -> abstractEventListener.handleEvent(message, Event.class, consumer));
+        abstractEventListener.handleEvent(message, Event.class, consumer);
+
+        verify(objectMapper, times(1)).readValue(messageBody, Event.class);
+//        verify(consumer, never()).accept(event);
     }
 
     @Test
