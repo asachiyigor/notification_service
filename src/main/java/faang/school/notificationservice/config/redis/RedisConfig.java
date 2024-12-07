@@ -16,7 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RedisConfig {
     private final RedisProperties redisProperties;
-    private  final List<AbstractEventListener<?>> eventListeners;
+    private final List<AbstractEventListener<?>> eventListeners;
 
     @Bean
     JedisConnectionFactory jedisConnectionFactory() {
@@ -31,7 +31,7 @@ public class RedisConfig {
         redisTemplate.setConnectionFactory(jedisConnectionFactory());
         redisTemplate.setDefaultSerializer(new StringRedisSerializer());
         redisTemplate.afterPropertiesSet();
-        return  redisTemplate;
+        return redisTemplate;
     }
 
     @Bean
