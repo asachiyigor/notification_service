@@ -1,6 +1,7 @@
 package faang.school.notificationservice.service.email;
 
 import faang.school.notificationservice.dto.UserDto;
+import faang.school.notificationservice.validator.mail.EmailValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,7 +14,8 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.verify;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -23,6 +25,9 @@ class EmailServiceTest {
 
     @Mock
     private JavaMailSender mailSender;
+
+    @Mock
+    private EmailValidator emailValidator;
 
     @Captor
     private ArgumentCaptor<SimpleMailMessage> messageCaptor;
@@ -43,7 +48,8 @@ class EmailServiceTest {
     }
 
     @Test
-    void send_Positive() {
+    void testSend_Positive() {
+        doNothing().when(emailValidator).checkUserEmailAddress(userDto);
         emailService.send(userDto, "Test");
         verify(mailSender).send(messageCaptor.capture());
         SimpleMailMessage result = messageCaptor.getValue();
@@ -51,7 +57,43 @@ class EmailServiceTest {
     }
 
     @Test
-    void getPreferredContact_returnEmail() {
+    void testSend_emailIsNull_Negative() {
+        userDto.setEmail(null);
+        doThrow(new IllegalArgumentException("Not found email for user with id=1"))
+                .when(emailValidator)
+                .checkUserEmailAddress(userDto);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> emailService.send(userDto, "Test"));
+        assertEquals("Not found email for user with id=1", exception.getMessage());
+    }
+
+    @Test
+    void testSend_emailIsBlank_Negative() {
+        userDto.setEmail("   ");
+        doThrow(new IllegalArgumentException("Not found email for user with id=1"))
+                .when(emailValidator)
+                .checkUserEmailAddress(userDto);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> emailService.send(userDto, "Test"));
+        assertEquals("Not found email for user with id=1", exception.getMessage());
+    }
+
+    @Test
+    void testSend_emailNotValid_Negative() {
+        userDto.setEmail("user@gmail.c5om");
+        doThrow(new IllegalArgumentException("Not valid email " + userDto.getEmail() + " for user with id=1"))
+                .when(emailValidator)
+                .checkUserEmailAddress(userDto);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> emailService.send(userDto, "Test"));
+        assertEquals("Not valid email " + userDto.getEmail() + " for user with id=1", exception.getMessage());
+    }
+
+    @Test
+    void testGetPreferredContact_returnEmail() {
         assertEquals(UserDto.PreferredContact.EMAIL, emailService.getPreferredContact());
     }
 }
