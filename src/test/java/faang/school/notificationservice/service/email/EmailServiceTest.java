@@ -13,6 +13,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
 
 
@@ -43,7 +44,7 @@ class EmailServiceTest {
     }
 
     @Test
-    void send_Positive() {
+    void testSend_Positive() {
         emailService.send(userDto, "Test");
         verify(mailSender).send(messageCaptor.capture());
         SimpleMailMessage result = messageCaptor.getValue();
@@ -51,7 +52,25 @@ class EmailServiceTest {
     }
 
     @Test
-    void getPreferredContact_returnEmail() {
+    void testSend_emailIsNull_Negative() {
+        userDto.setEmail(null);
+        assertThrows(IllegalArgumentException.class, () -> emailService.send(userDto, "Test"));
+    }
+
+    @Test
+    void testSend_emailIsBlank_Negative() {
+        userDto.setEmail("   ");
+        assertThrows(IllegalArgumentException.class, () -> emailService.send(userDto, "Test"));
+    }
+
+    @Test
+    void testSend_emailNotValid_Negative() {
+        userDto.setEmail("user@gmail.c5om");
+        assertThrows(IllegalArgumentException.class, () -> emailService.send(userDto, "Test"));
+    }
+
+    @Test
+    void testGetPreferredContact_returnEmail() {
         assertEquals(UserDto.PreferredContact.EMAIL, emailService.getPreferredContact());
     }
 }

@@ -2,6 +2,7 @@ package faang.school.notificationservice.service.email;
 
 import faang.school.notificationservice.dto.UserDto;
 import faang.school.notificationservice.service.NotificationService;
+import faang.school.notificationservice.validator.mail.EmailValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class EmailService implements NotificationService {
     private final JavaMailSender mailSender;
+    private final EmailValidator emailValidator;
 
     @Value("{spring.mail.username}")
     private String serviceMail;
@@ -25,9 +27,8 @@ public class EmailService implements NotificationService {
 
     @Override
     public void send(UserDto user, String text) {
-        if (user.getEmail() == null || user.getEmail().isBlank()) {
-            throw new IllegalArgumentException("Not found email for user with id=" + user.getId());
-        }
+        emailValidator.checkUserEmailAddress(user);
+
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(serviceMail);
         message.setTo(user.getEmail());
@@ -35,4 +36,6 @@ public class EmailService implements NotificationService {
         message.setText(text);
         mailSender.send(message);
     }
+
+
 }

@@ -31,7 +31,8 @@ public abstract class AbstractEventListener<T> {
             log.info("Received event: {}", event);
             consumer.accept(event);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            log.error("Failed to handle event", e);
+            throw new RuntimeException("Failed to handle event " + eventClass.getName());
         }
     }
 
