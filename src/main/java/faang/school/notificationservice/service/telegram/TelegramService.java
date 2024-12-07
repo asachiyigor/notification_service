@@ -2,7 +2,7 @@ package faang.school.notificationservice.service.telegram;
 
 import faang.school.notificationservice.dto.UserDto;
 import faang.school.notificationservice.service.NotificationService;
-import faang.school.notificationservice.service.telegram.bot.TelegramBot;
+import faang.school.notificationservice.config.telegram.bot.TelegramBot;
 
 public class TelegramService implements NotificationService {
     TelegramBot telegramBot;
