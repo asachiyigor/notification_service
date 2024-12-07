@@ -32,7 +32,6 @@ public abstract class AbstractEventListener<T> {
             consumer.accept(event);
         } catch (IOException e) {
             log.error("Failed to handle event", e);
-            throw new RuntimeException("Failed to handle event " + eventClass.getName());
         }
     }
 
