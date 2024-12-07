@@ -1,4 +1,4 @@
-package faang.school.notificationservice.validator.mail;
+package faang.school.notificationservice.validator.email;
 
 import faang.school.notificationservice.dto.UserDto;
 import org.junit.jupiter.api.Test;
