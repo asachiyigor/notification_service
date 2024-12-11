@@ -30,7 +30,8 @@ public class RedisConfig {
         final RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(jedisConnectionFactory());
         redisTemplate.setDefaultSerializer(new StringRedisSerializer());
-        return  redisTemplate;
+        redisTemplate.afterPropertiesSet();
+        return redisTemplate;
     }
 
     @Bean

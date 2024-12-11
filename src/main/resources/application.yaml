@@ -10,6 +10,10 @@ spring:
         follower: follower_channel
         achievement: achievement_channel
         sms: smsTopic
+        project-follower-channel:
+          name: project-follower-channel
+        user-view-channel:
+          name: user-view-channel
 
   mail:
     host: smtp.gmail.com
