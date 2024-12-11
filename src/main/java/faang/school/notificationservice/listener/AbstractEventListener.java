@@ -28,10 +28,10 @@ public abstract class AbstractEventListener<T> {
     protected void handleEvent(Message message, Class<T> eventClass, Consumer<T> consumer) {
         try {
             T event = objectMapper.readValue(message.getBody(), eventClass);
-            log.info("Event received: {}", eventClass.getName());
+            log.info("Received event: {}", event);
             consumer.accept(event);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            log.error("Failed to handle event", e);
         }
     }
 
@@ -43,7 +43,7 @@ public abstract class AbstractEventListener<T> {
                 .orElseThrow(
                         () -> new IllegalArgumentException("No message builder found for " + eventClass.getName())
                 );
-        log.info("Message built for event {}: {}", eventClass.getName(), text);
+        log.info("Message built for event {}: {}",eventClass.getName(), text);
         return text;
     }
 
@@ -51,9 +51,10 @@ public abstract class AbstractEventListener<T> {
         notificationServices.stream()
                 .filter(service -> service.getPreferredContact() == receiver.getPreference())
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("No notification service found for user " + receiver.getId()))
+                .orElseThrow(() ->
+                        new IllegalArgumentException("No notification service found for receiver " + receiver.getEmail()))
                 .send(receiver, message);
-        log.info("Notification sent to user {} with message {}", receiver.getId(), message);
+        log.info("Notification sent to receiver {} with message: {}", receiver.getEmail(), message);
     }
 
     public MessageListenerAdapter getListenerAdapter() {

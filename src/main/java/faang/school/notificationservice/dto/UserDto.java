@@ -1,5 +1,8 @@
 package faang.school.notificationservice.dto;
 
+import com.vonage.client.account.Country;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,7 +18,11 @@ import java.util.Locale;
 public class UserDto {
     private Long id;
     private String username;
+    private String password;
     private String email;
+    private String aboutMe;
+    private String city;
+    private Country country;
     private String phone;
     private List<Long> participatedEventIds;
     private PreferredContact preference;
