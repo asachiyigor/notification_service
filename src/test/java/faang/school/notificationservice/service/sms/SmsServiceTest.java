@@ -29,7 +29,6 @@ class SmsServiceTest {
     void positiveSend() {
         UserDto userDto = new UserDto();
         String jsonResponse = "{\"messages\": [{\"status\": \"0\"}]}";
-
         response = SmsSubmissionResponse.fromJson(jsonResponse);
 
         when(vonageClient.getSmsClient()).thenReturn(smsClient);
