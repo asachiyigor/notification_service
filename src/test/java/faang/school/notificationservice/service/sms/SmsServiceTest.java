@@ -5,6 +5,7 @@ import com.vonage.client.sms.SmsClient;
 import com.vonage.client.sms.SmsSubmissionResponse;
 import com.vonage.client.sms.messages.TextMessage;
 import faang.school.notificationservice.dto.UserDto;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -39,5 +40,35 @@ class SmsServiceTest {
         smsService.send(userDto, "Hello");
 
         verify(smsClient, times(1)).submitMessage(any(TextMessage.class));
+    }
+
+    @Test
+    void negativeSend() {
+        UserDto userDto = new UserDto();
+        String jsonResponse = "{\"messages\": [{\"status\": \"1\"}]}";
+        response = SmsSubmissionResponse.fromJson(jsonResponse);
+
+        when(vonageClient.getSmsClient()).thenReturn(smsClient);
+        when(smsClient.submitMessage(any(TextMessage.class))).thenReturn(response);
+
+        SmsService smsService = new SmsService(vonageClient);
+        smsService.send(userDto, "Hello");
+
+        verify(smsClient, times(1)).submitMessage(any(TextMessage.class));
+        Assertions.assertNull(response.getMessages().get(0).getErrorText());
+    }
+
+    @Test
+    void negativeWrongDto() {
+        UserDto userDto = new UserDto();
+        userDto.setPhone(null);
+
+        SmsService smsService = new SmsService(vonageClient);
+
+        IllegalArgumentException thrown = Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            smsService.send(userDto, "Hello");
+        });
+
+        Assertions.assertEquals("Phone can`t be blank", thrown.getMessage());
     }
 }

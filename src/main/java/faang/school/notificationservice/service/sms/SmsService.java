@@ -19,6 +19,10 @@ public class SmsService implements NotificationService {
 
     @Override
     public void send(UserDto user, String messageText) {
+        if (user.getPhone() == null || user.getPhone().isBlank()) {
+            throw new IllegalArgumentException("Phone can`t be blank");
+        }
+
         TextMessage textMessage = new TextMessage("Vii`Rus",
                 user.getPhone(),
                 messageText
