@@ -19,12 +19,17 @@ public class SmsService implements NotificationService {
 
     @Override
     public void send(UserDto user, String messageText) {
+        if (user.getPhone() == null || user.getPhone().isBlank()) {
+            throw new IllegalArgumentException("Phone can`t be blank");
+        }
+
         TextMessage textMessage = new TextMessage("Vii`Rus",
                 user.getPhone(),
                 messageText
         );
 
         SmsSubmissionResponse response = vonageClient.getSmsClient().submitMessage(textMessage);
+
         if (response.getMessages().get(0).getStatus() == MessageStatus.OK) {
             log.info("Message sent successfully.");
         } else {

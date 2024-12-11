@@ -20,7 +20,7 @@ import java.util.List;
 public class ProjectFollowerListener extends AbstractEventListener<ProjectFollowerEvent> implements MessageListener {
     private final UserServiceClient userServiceClient;
 
-    @Value("${spring.data.redis.channels.project-follower-channel.name}")
+    @Value("${spring.data.redis.channel.project-follower-channel.name}")
     private String projectFollowerChannel;
 
     public ProjectFollowerListener(List<NotificationService> notificationServices,

@@ -6,11 +6,12 @@ spring:
       channels:
         skillOffer-channel:
           name: skill_offer_event
+      channel:
         follower: follower_channel
         achievement: achievement_channel
+        sms: smsTopic
         project-follower-channel:
           name: project-follower-channel
-        sms: smsTopic
         user-view-channel:
           name: user-view-channel
 
@@ -36,7 +37,7 @@ logging:
   level:
     root: info
 
-#Можно зарегистрировать аккаунт без привязки карты. Будет 2 евро на отправку тестовых SMS
+  #Можно зарегистрировать аккаунт без привязки карты. Будет 2 евро на отправку тестовых SMS
 vonage: #https://dashboard.nexmo.com/getting-started/sms
   api:
     apiKey: #// тут api key

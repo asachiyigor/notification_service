@@ -20,7 +20,7 @@ import java.util.List;
 public class UserProfileViewListener extends AbstractEventListener<UserProfileEvent> implements MessageListener {
     private final UserServiceClient userServiceClient;
 
-    @Value("${spring.data.redis.channels.user-view-channel.name}")
+    @Value("${spring.data.redis.channel.user-view-channel.name}")
     private String userProfileEventChannel;
 
     public UserProfileViewListener(List<NotificationService> notificationServices,
