@@ -3,6 +3,8 @@ package faang.school.notificationservice.dto;
 import com.vonage.client.account.Country;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

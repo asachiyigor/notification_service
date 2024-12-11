@@ -6,6 +6,13 @@ spring:
       channels:
         skillOffer-channel:
           name: skill_offer_event
+        follower: follower_channel
+        achievement: achievement_channel
+        project-follower-channel:
+          name: project-follower-channel
+        sms: smsTopic
+        user-view-channel:
+          name: user-view-channel
 
   mail:
     host: smtp.gmail.com
@@ -32,8 +39,9 @@ logging:
 #Можно зарегистрировать аккаунт без привязки карты. Будет 2 евро на отправку тестовых SMS
 vonage: #https://dashboard.nexmo.com/getting-started/sms
   api:
-    key: whatever
-    secret: whatever
+    apiKey: #// тут api key
+    apiSecret: #// тут secret key
+
 
 project-service:
     host: localhost
