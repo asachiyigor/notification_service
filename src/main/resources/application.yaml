@@ -3,6 +3,9 @@ spring:
     redis:
       port: 6379
       host: localhost
+      channels:
+        skillOffer-channel:
+          name: skill_offer_event
       channel:
         follower: follower_channel
         achievement: achievement_channel
@@ -13,15 +16,12 @@ spring:
     port: 587
     username: your_email@gmail.com #https://www.baeldung.com/spring-email
     password: whatever #генерируем для своего Google аккаунта по инструкции https://support.google.com/accounts/answer/185833
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
-          connectiontimeout: 5000
-          timeout: 5000
-          writetimeout: 5000
+    smtp:
+      auth: true
+      starttls:
+        enable: true
+    debug: true
+    protocol: smtp
 
   messages:
     basename: messages
