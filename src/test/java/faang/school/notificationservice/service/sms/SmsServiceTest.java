@@ -28,6 +28,7 @@ class SmsServiceTest {
     @Test
     void positiveSend() {
         UserDto userDto = new UserDto();
+        userDto.setPhone("1234567890");
         String jsonResponse = "{\"messages\": [{\"status\": \"0\"}]}";
         response = SmsSubmissionResponse.fromJson(jsonResponse);
 
@@ -44,6 +45,7 @@ class SmsServiceTest {
     @Test
     void negativeSend() {
         UserDto userDto = new UserDto();
+        userDto.setPhone("1234567890");
         String jsonResponse = "{\"messages\": [{\"status\": \"1\"}]}";
         response = SmsSubmissionResponse.fromJson(jsonResponse);
 
