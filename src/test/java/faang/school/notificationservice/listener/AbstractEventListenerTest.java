@@ -9,6 +9,7 @@ import lombok.Data;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.redis.connection.Message;
@@ -20,9 +21,7 @@ import java.util.Locale;
 import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class AbstractEventListenerTest {
@@ -41,10 +40,13 @@ class AbstractEventListenerTest {
     @Mock
     private Message message;
 
+    @Mock
+    private Consumer<Event> consumer;
+
     private AbstractEventListener<Event> abstractEventListener;
+
     private Event event;
     private byte[] messageBody;
-    private Consumer<Event> consumer;
     private String messageBuild;
     private UserDto userDto;
     private String channelTopic;
@@ -65,8 +67,7 @@ class AbstractEventListenerTest {
                 List.of(notificationService),
                 List.of(messageBuilder),
                 objectMapper,
-                userServiceClient
-        ) {
+                userServiceClient) {
             @Override
             public ChannelTopic getChannelTopic() {
                 return new ChannelTopic(channelTopic);

@@ -3,6 +3,9 @@ spring:
     redis:
       port: 6379
       host: localhost
+      channels:
+        skillOffer-channel:
+          name: skill_offer_event
 
   mail:
     host: smtp.gmail.com
