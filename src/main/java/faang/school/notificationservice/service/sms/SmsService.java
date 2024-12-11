@@ -25,7 +25,6 @@ public class SmsService implements NotificationService {
         );
 
         SmsSubmissionResponse response = vonageClient.getSmsClient().submitMessage(textMessage);
-
         if (response.getMessages().get(0).getStatus() == MessageStatus.OK) {
             log.info("Message sent successfully.");
         } else {

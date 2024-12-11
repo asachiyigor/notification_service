@@ -27,7 +27,7 @@ public class ProjectFollowerListener extends AbstractEventListener<ProjectFollow
         this.userServiceClient = userServiceClient;
     }
 
-    @Value("${spring.data.redis.channel.project-follower-channel.name}")
+    @Value("${spring.data.redis.channels.project-follower-channel.name}")
     private String projectFollowerChannel;
 
     @Override
